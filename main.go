@@ -1,8 +1,6 @@
 package main
 
 import (
-	"net/http"
-
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -14,10 +12,10 @@ func main() {
 	e.Use(middleware.Recover())
 
 	e.GET("/", hello)
+	e.GET("/user/:id", getUser)
+	e.POST("/user", saveUser)
+	e.PUT("/user/:id", updateUser)
+	e.DELETE("/user/:id", deleteUser)
 
 	e.Logger.Fatal(e.Start(":1323"))
-}
-
-func hello(c echo.Context) error {
-	return c.String(http.StatusOK, "Hello, World!")
 }
