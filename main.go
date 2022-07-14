@@ -17,5 +17,7 @@ func main() {
 	e.PUT("/user/:id", updateUser)
 	e.DELETE("/user/:id", deleteUser)
 
+	e.GET("/show", show)
+
 	e.Logger.Fatal(e.Start(":1323"))
 }

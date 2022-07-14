@@ -34,3 +34,9 @@ func updateUser(c echo.Context) error {
 func deleteUser(c echo.Context) error {
 	return c.JSON(http.StatusOK, response{Code: 0, Message: "deleted"})
 }
+
+func show(c echo.Context) error {
+	team := c.QueryParam("team")
+	member := c.QueryParam("member")
+	return c.String(http.StatusOK, "team: "+team+", member: "+member)
+}
