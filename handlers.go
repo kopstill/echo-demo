@@ -2,6 +2,7 @@ package main
 
 import (
 	"io"
+	"kopever/echo-demo/entity"
 	"net/http"
 	"os"
 	"strings"
@@ -75,4 +76,14 @@ func avatar(c echo.Context) error {
 	}
 
 	return c.HTML(http.StatusOK, "<b>Thank you! "+name+"</b>")
+}
+
+func users(c echo.Context) error {
+	u := new(entity.User)
+	if err := c.Bind(u); err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusCreated, u)
+	// return c.XML(http.StatusCreated, u)
 }

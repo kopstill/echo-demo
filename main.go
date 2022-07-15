@@ -30,5 +30,8 @@ func main() {
 	// Form multipart/form-data
 	e.POST("/avatar", avatar)
 
+	// Handling Request
+	e.POST("/users", users)
+
 	e.Logger.Fatal(e.Start(":1323"))
 }
