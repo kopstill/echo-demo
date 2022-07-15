@@ -18,6 +18,7 @@ func main() {
 	e.DELETE("/user/:id", deleteUser)
 
 	e.GET("/show", show)
+	e.POST("/save", save)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }
