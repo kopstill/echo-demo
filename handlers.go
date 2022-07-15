@@ -1,7 +1,10 @@
 package main
 
 import (
+	"io"
 	"net/http"
+	"os"
+	"strings"
 
 	"github.com/labstack/echo/v4"
 )
@@ -45,4 +48,31 @@ func save(c echo.Context) error {
 	name := c.FormValue("name")
 	email := c.FormValue("email")
 	return c.String(http.StatusOK, "name: "+name+", email: "+email)
+}
+
+func avatar(c echo.Context) error {
+	name := c.FormValue("name")
+	avatar, err := c.FormFile("avatar")
+	if err != nil {
+		return err
+	}
+
+	src, err := avatar.Open()
+	if err != nil {
+		return err
+	}
+	defer src.Close()
+
+	// dst, err := os.Create("/Users/kopever/Develop/temp/echo-demo/" + avatar.Filename)
+	dst, err := os.Create("/Users/kopever/Develop/temp/echo-demo/" + name + "." + strings.Split(avatar.Filename, ".")[len(strings.Split(avatar.Filename, "."))-1])
+	if err != nil {
+		return err
+	}
+	defer dst.Close()
+
+	if _, err := io.Copy(dst, src); err != nil {
+		return nil
+	}
+
+	return c.HTML(http.StatusOK, "<b>Thank you! "+name+"</b>")
 }
