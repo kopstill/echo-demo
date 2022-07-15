@@ -1,6 +1,8 @@
 package main
 
 import (
+	"net/http"
+
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -8,6 +10,7 @@ import (
 func main() {
 	e := echo.New()
 
+	// Middleware
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
@@ -32,6 +35,32 @@ func main() {
 
 	// Handling Request
 	e.POST("/users", users)
+
+	// Static Content
+	e.Static("/static", "static")
+
+	// Group level middleware
+	g := e.Group("/admin")
+	g.Use(middleware.BasicAuth(func(username, password string, c echo.Context) (bool, error) {
+		if username == "joe" && password == "secret" {
+			return true, nil
+		}
+		return false, nil
+	}))
+	g.GET("/login", func(c echo.Context) error {
+		return c.String(http.StatusOK, "admin login")
+	})
+
+	// Route level middleware
+	track := func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			println("request to /users")
+			return next(c)
+		}
+	}
+	e.GET("/users", func(c echo.Context) error {
+		return c.String(http.StatusOK, "/users")
+	}, track)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }
