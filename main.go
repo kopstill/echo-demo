@@ -10,6 +10,9 @@ import (
 func main() {
 	e := echo.New()
 
+	// Debug
+	e.Debug = true
+
 	// Middleware
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
